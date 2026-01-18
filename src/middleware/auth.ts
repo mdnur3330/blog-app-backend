@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import {auth as BetterAuth} from '../lib/auth'
-import { success } from "better-auth/*";
+
 
 
 
@@ -19,9 +19,9 @@ declare global{
 }
 
 export enum UserRole{
-    USER="user",
-    ADMIN="admin",
-    CUSTOMER="customer"
+    USER="USER",
+    ADMIN="ADMIN",
+    CUSTOMER="COUSTOMER"
 }
 
 export const auth = (...roles:UserRole[])=>{
@@ -36,12 +36,12 @@ export const auth = (...roles:UserRole[])=>{
                 message: "you are not authorized"
             })
         }
-        // if(!session.user.emailVerified){
-        //     return res.status(401).json({
-        //         success: false,
-        //         message: "email verifiy requird"
-        //     })
-        // }
+        if(!session.user.emailVerified){
+            return res.status(401).json({
+                success: false,
+                message: "email verifiy requird"
+            })
+        }
 
         req.user = {
             id: session.user.id,
@@ -51,7 +51,7 @@ export const auth = (...roles:UserRole[])=>{
             emailVerified:session.user.emailVerified
         }
 
-        if(roles.length && ! roles.includes(req.user.role as UserRole)){
+        if(roles.length && !roles.includes(req.user.role as UserRole)){
             return res.status(403).json({
                 success:false,
                 message: 'Forbidden! You do not have permission to access this resources'
