@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { postServes } from "./post.serves";
 import { PostStatus } from "../../../generated/prisma/enums";
 import paginationSortingHelpres from "../../helpers/paginationSortinHepers";
@@ -89,7 +89,7 @@ const getMyAllPost:RequestHandler = async (req,res)=>{
     }
 }
 
-const createPost = async (req:Request,res:Response)=>{
+const createPost = async (req:Request,res:Response, next:NextFunction)=>{
     try{
         if(!req.user){
             return res.status(403).json({
@@ -103,13 +103,11 @@ const createPost = async (req:Request,res:Response)=>{
             data: result
         })
     }catch(err:any){
-        res.status(500).json({
-            message: err.message
-        })
+        next(err)
     }
 }
 
-const updateMyPost = async (req:Request,res:Response)=>{
+const updateMyPost = async (req:Request,res:Response, next:NextFunction)=>{
     try{
         if(!req.user){
             throw new Error("unAuthorize")
@@ -125,10 +123,7 @@ const updateMyPost = async (req:Request,res:Response)=>{
             data: result
         })
     }catch(err:any){
-        res.status(500).json({
-            data: "Post Can not Updated",
-            message: err.message
-        })
+       next(err)
     }
 }
 

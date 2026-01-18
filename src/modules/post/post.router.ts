@@ -9,7 +9,7 @@ router.get("/", auth(UserRole.ADMIN), postControler.getAllPost)
 router.get("/stats", auth(UserRole.ADMIN), postControler.getStatas)
 router.get("/my-posts", auth(UserRole.ADMIN),postControler.getMyAllPost)
 router.get("/:id",postControler.getPostById)
-router.post("/", auth(UserRole.ADMIN), postControler.createPost)
+router.post("/", auth(UserRole.ADMIN, UserRole.USER), postControler.createPost)
 router.patch("/:id", auth(UserRole.ADMIN,UserRole.USER), postControler.updateMyPost)
 router.delete("/:id",auth(UserRole.ADMIN,UserRole.USER), postControler.deletePost)
 
